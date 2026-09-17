@@ -1,1 +1,488 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>담임 선생님께 드리는 풍성한 추석 감사 카드</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Gowun Dodum, Jua, and Noto Serif KR -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Jua&family=Noto+Serif+KR:wght@600;700&display=swap" rel="stylesheet">
+    <!-- Tone.js for BGM melody synthesis -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone.js/14.8.49/Tone.js"></script>
+    <!-- Canvas Confetti for wish effects -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        body {
+            font-family: 'Gowun Dodum', sans-serif;
+        }
+        .font-jua {
+            font-family: 'Jua', sans-serif;
+        }
+        .font-serif-kr {
+            font-family: 'Noto Serif KR', serif;
+        }
+        
+        /* Moon Floating Animation */
+        @keyframes float-moon {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-12px) rotate(1deg); }
+        }
+        .animate-float-moon {
+            animation: float-moon 6s ease-in-out infinite;
+        }
 
+        /* Lantern Floating Animation */
+        @keyframes float-lantern {
+            0% { transform: translateY(0px) translateX(0px); opacity: 0.8; }
+            50% { transform: translateY(-25px) translateX(10px); opacity: 1; }
+            100% { transform: translateY(-50px) translateX(-5px); opacity: 0.8; }
+        }
+        .animate-lantern {
+            animation: float-lantern 7s ease-in-out infinite alternate;
+        }
+
+        /* Moon Pulse Glow Effect */
+        @keyframes moon-glow {
+            0%, 100% { box-shadow: 0 0 50px 15px rgba(254, 240, 138, 0.5), inset 0 0 20px rgba(253, 224, 71, 0.4); }
+            50% { box-shadow: 0 0 80px 25px rgba(254, 240, 138, 0.8), inset 0 0 30px rgba(250, 204, 21, 0.6); }
+        }
+        .moon-glow {
+            animation: moon-glow 4s ease-in-out infinite;
+        }
+
+        /* Traditional Pattern Border */
+        .dancheong-border {
+            border-image: linear-gradient(to right, #f59e0b, #ef4444, #10b981, #3b82f6, #f59e0b) 1;
+        }
+
+        /* Custom Scrollbar for message area */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 8px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(245, 158, 11, 0.5);
+            border-radius: 8px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(245, 158, 11, 0.8);
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col items-center justify-between p-3 sm:p-6 overflow-x-hidden relative selection:bg-amber-500 selection:text-slate-950">
+
+    <!-- Night Sky Canvas / Background -->
+    <div class="fixed inset-0 z-0 pointer-events-none overflow-hidden bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-950 via-slate-950 to-black">
+        
+        <!-- Stars Overlay -->
+        <div class="absolute inset-0 opacity-70">
+            <div class="absolute top-[10%] left-[15%] text-amber-200 text-xs animate-ping">✨</div>
+            <div class="absolute top-[20%] left-[80%] text-amber-100 text-sm animate-pulse">⭐</div>
+            <div class="absolute top-[40%] left-[10%] text-amber-300 text-xs animate-pulse">🌟</div>
+            <div class="absolute top-[15%] left-[45%] text-yellow-100 text-xs animate-ping">✨</div>
+            <div class="absolute top-[65%] left-[85%] text-amber-200 text-sm animate-pulse">⭐</div>
+            <div class="absolute top-[75%] left-[25%] text-amber-100 text-xs animate-pulse">✨</div>
+        </div>
+
+        <!-- Glowing Full Moon (Interactive Button) -->
+        <div class="absolute top-6 sm:top-10 right-6 sm:right-16 z-10 flex flex-col items-center">
+            <button onclick="makeMoonWish()" title="보름달 클릭하고 소원 빌기!" class="group relative w-28 h-28 sm:w-40 sm:h-40 md:w-48 md:h-48 rounded-full bg-gradient-to-br from-amber-100 via-amber-200 to-yellow-400 moon-glow animate-float-moon flex items-center justify-center cursor-pointer transition transform hover:scale-105 active:scale-95 focus:outline-none">
+                <!-- Moon Texture / Craters -->
+                <div class="absolute w-7 h-7 sm:w-10 sm:h-10 top-4 left-6 bg-amber-300/30 rounded-full blur-[1px]"></div>
+                <div class="absolute w-10 h-10 sm:w-14 sm:h-14 bottom-6 right-8 bg-amber-300/30 rounded-full blur-[2px]"></div>
+                <div class="absolute w-5 h-5 sm:w-8 sm:h-8 top-12 right-10 bg-amber-300/25 rounded-full blur-[1px]"></div>
+                
+                <!-- Moon Rabbit Silhouette SVG -->
+                <div class="opacity-80 group-hover:opacity-100 transition duration-300">
+                    <svg class="w-12 h-12 sm:w-20 sm:h-20 text-amber-800/40" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2a3 3 0 0 0-3 3c0 .8.3 1.5.8 2.1C8.3 8 7 9.8 7 12c0 2.8 2.2 5 5 5s5-2.2 5-5c0-2.2-1.3-4-2.8-4.9.5-.6.8-1.3.8-2.1a3 3 0 0 0-3-3zm-1 3a1 1 0 1 1 2 0 1 1 0 0 1-2 0z"/>
+                    </svg>
+                </div>
+                <!-- Moon Click Tooltip -->
+                <span class="absolute -bottom-7 bg-amber-900/90 text-amber-200 text-xs px-2.5 py-1 rounded-full border border-amber-500/40 opacity-90 group-hover:opacity-100 transition whitespace-nowrap shadow-md">
+                    🌕 달님 클릭! 소원 빌기
+                </span>
+            </button>
+        </div>
+
+        <!-- Floating Traditional Sky Lanterns -->
+        <div class="absolute top-1/3 left-[8%] animate-lantern text-3xl sm:text-4xl select-none opacity-80">🏮</div>
+        <div class="absolute top-1/2 left-[82%] animate-lantern text-2xl sm:text-3xl select-none opacity-70" style="animation-delay: 2s;">🏮</div>
+        <div class="absolute top-2/3 left-[15%] animate-lantern text-xl sm:text-2xl select-none opacity-60" style="animation-delay: 4s;">🏮</div>
+
+        <!-- Traditional Autumn Clouds -->
+        <div class="absolute top-20 left-0 w-full h-32 bg-gradient-to-r from-transparent via-indigo-900/20 to-transparent blur-xl"></div>
+    </div>
+
+    <!-- Top Header & Audio Control Bar -->
+    <header class="z-20 w-full max-w-2xl flex justify-between items-center bg-slate-900/70 backdrop-blur-md px-4 py-3 rounded-2xl border border-amber-500/30 shadow-lg mb-4 sm:mb-6">
+        <div class="flex items-center space-x-2">
+            <span class="text-2xl sm:text-3xl">🌾</span>
+            <div>
+                <h1 class="font-jua text-lg sm:text-xl text-amber-300 tracking-wide">2026 한가위 감사 카드</h1>
+                <p class="text-xs text-amber-200/70">담임 선생님께 전하는 따뜻한 추석 인사</p>
+            </div>
+        </div>
+        
+        <!-- BGM Toggle Button -->
+        <button id="bgmBtn" onclick="toggleBGM()" class="flex items-center space-x-2 bg-gradient-to-r from-amber-600/30 to-amber-500/20 hover:from-amber-600/50 hover:to-amber-500/40 border border-amber-500/40 text-amber-200 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-medium transition duration-300 cursor-pointer shadow-md group">
+            <span id="bgmIcon" class="text-base group-hover:scale-110 transition transform">🎵</span>
+            <span id="bgmText">추석 배경음악 켜기</span>
+        </button>
+    </header>
+
+    <!-- Main Interactive Card Frame -->
+    <main class="z-20 w-full max-w-2xl bg-slate-900/85 backdrop-blur-xl border-2 border-amber-500/40 rounded-3xl p-5 sm:p-8 shadow-[0_0_50px_rgba(0,0,0,0.8)] relative overflow-hidden my-auto">
+        
+        <!-- Corner Traditional Pattern Accents -->
+        <div class="absolute top-2 left-2 text-amber-500/40 text-sm select-none">❖</div>
+        <div class="absolute top-2 right-2 text-amber-500/40 text-sm select-none">❖</div>
+        <div class="absolute bottom-2 left-2 text-amber-500/40 text-sm select-none">❖</div>
+        <div class="absolute bottom-2 right-2 text-amber-500/40 text-sm select-none">❖</div>
+
+        <!-- Card Header Title -->
+        <div class="text-center mb-6">
+            <div class="inline-flex items-center space-x-1.5 bg-amber-500/10 border border-amber-500/30 px-3.5 py-1 rounded-full text-xs text-amber-300 font-medium mb-3">
+                <span>🌰</span>
+                <span>풍요롭고 넉넉한 한가위 되세요</span>
+                <span>🍁</span>
+            </div>
+            
+            <div class="flex justify-center items-center space-x-2">
+                <span class="text-amber-400 text-lg">✦</span>
+                <h2 id="cardToTitle" class="font-serif-kr text-2xl sm:text-3xl text-amber-100 font-bold tracking-tight">
+                    존경하는 담임 선생님께
+                </h2>
+                <span class="text-amber-400 text-lg">✦</span>
+            </div>
+            <div class="w-20 h-0.5 bg-gradient-to-r from-transparent via-amber-400 to-transparent mx-auto mt-2"></div>
+        </div>
+
+        <!-- Message Body Container -->
+        <div class="bg-slate-950/70 border border-amber-500/30 rounded-2xl p-5 sm:p-7 shadow-inner relative mb-6">
+            <!-- Decorative Subtle Watermark -->
+            <div class="absolute inset-0 flex items-center justify-center opacity-5 pointer-events-none select-none text-9xl">
+                🌕
+            </div>
+
+            <div id="messageDisplay" class="relative z-10 text-slate-100 text-base sm:text-lg leading-relaxed whitespace-pre-line min-h-[180px] font-sans">
+                선생님, 안녕하세요! 
+                풍성한 보름달처럼 마음까지 따뜻해지는 즐거운 추석 명절이 다가왔습니다.
+
+                항상 인내와 사랑으로 저희를 바른 길로 이끌어 주시고 늘 세심하게 챙겨주셔서 진심으로 감사드립니다. 
+
+                이번 연휴 동안은 학교 일은 잠시 잊으시고, 사랑하는 가족분들과 함께 맛있는 음식도 많이 드시며 편안하고 행복한 휴식 보내시길 바랍니다. 
+
+                항상 건강하시고 가정에 늘 웃음과 행복이 가득하시길 마음 모아 기원합니다!
+            </div>
+
+            <!-- Student Signature Display -->
+            <div class="text-right mt-6 border-t border-amber-500/20 pt-4 text-amber-200 font-jua text-lg">
+                - 제자 <span id="studentNameDisplay" class="text-amber-300 underline decoration-amber-500/50 underline-offset-4">OOO</span> 올림 💌 -
+            </div>
+        </div>
+
+        <!-- Controls & Customization Section -->
+        <div class="space-y-4">
+            
+            <!-- Quick Preset Message Selector -->
+            <div>
+                <label class="block text-xs text-amber-300 font-medium mb-1.5 flex items-center justify-between">
+                    <span>✨ 감사 문구 예시 선택:</span>
+                    <span class="text-slate-400 font-normal">원하는 스타일을 클릭하세요</span>
+                </label>
+                <div class="grid grid-cols-3 gap-2">
+                    <button onclick="applyPreset(0)" class="bg-slate-800/80 hover:bg-amber-600/30 border border-slate-700 hover:border-amber-500/50 text-slate-200 text-xs sm:text-sm py-2 px-2 rounded-xl transition text-center truncate cursor-pointer">
+                        💐 정성스러운 인사
+                    </button>
+                    <button onclick="applyPreset(1)" class="bg-slate-800/80 hover:bg-amber-600/30 border border-slate-700 hover:border-amber-500/50 text-slate-200 text-xs sm:text-sm py-2 px-2 rounded-xl transition text-center truncate cursor-pointer">
+                        😊 친근하고 밝은 인사
+                    </button>
+                    <button onclick="applyPreset(2)" class="bg-slate-800/80 hover:bg-amber-600/30 border border-slate-700 hover:border-amber-500/50 text-slate-200 text-xs sm:text-sm py-2 px-2 rounded-xl transition text-center truncate cursor-pointer">
+                        🙏 짧고 명쾌한 인사
+                    </button>
+                </div>
+            </div>
+
+            <!-- Customization Form Inputs -->
+            <div class="bg-slate-950/40 p-4 rounded-2xl border border-slate-800 space-y-3">
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <div class="w-full sm:w-1/2">
+                        <label class="block text-xs text-slate-300 mb-1">선생님 호칭:</label>
+                        <input type="text" id="teacherTitleInput" value="존경하는 담임 선생님께" oninput="updateCardText()" class="w-full bg-slate-900 border border-amber-500/30 rounded-xl px-3 py-1.5 text-sm text-amber-200 focus:outline-none focus:border-amber-400">
+                    </div>
+                    <div class="w-full sm:w-1/2">
+                        <label class="block text-xs text-slate-300 mb-1">보내는 학생 이름:</label>
+                        <input type="text" id="studentNameInput" placeholder="예: 김철수" oninput="updateCardText()" class="w-full bg-slate-900 border border-amber-500/30 rounded-xl px-3 py-1.5 text-sm text-amber-200 focus:outline-none focus:border-amber-400">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs text-slate-300 mb-1">편지 내용 직접 수정하기:</label>
+                    <textarea id="messageEditor" rows="4" oninput="updateCardText()" class="w-full bg-slate-900 border border-amber-500/30 rounded-xl p-3 text-sm text-slate-100 focus:outline-none focus:border-amber-400 resize-none leading-relaxed"></textarea>
+                </div>
+            </div>
+
+            <!-- Interactive Action Buttons -->
+            <div class="flex flex-wrap gap-2 pt-2">
+                <button onclick="copyCardContent()" class="flex-1 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold py-3 px-4 rounded-xl text-sm transition transform hover:-translate-y-0.5 active:translate-y-0 shadow-lg flex items-center justify-center space-x-2 cursor-pointer">
+                    <span>📋</span>
+                    <span>카드 내용 복사하기</span>
+                </button>
+                <button onclick="showSongpyeonWish()" class="bg-slate-800 hover:bg-slate-700 text-amber-300 border border-amber-500/40 font-medium py-3 px-4 rounded-xl text-sm transition flex items-center justify-center space-x-2 cursor-pointer">
+                    <span>🍡</span>
+                    <span>추석 송편 선물 받기</span>
+                </button>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Interactive Modal Notification -->
+    <div id="wishModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-900 border-2 border-amber-500/50 rounded-3xl p-6 max-w-sm w-full text-center shadow-2xl relative animate-float-moon">
+            <div id="modalIcon" class="text-5xl mb-3">🌕</div>
+            <h3 id="modalTitle" class="font-jua text-2xl text-amber-300 mb-2">달님에게 전한 소원</h3>
+            <p id="modalBody" class="text-slate-200 text-sm leading-relaxed mb-6 whitespace-pre-line">
+                소원이 달님에게 전달되었습니다!
+            </p>
+            <button onclick="closeModal()" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold py-2.5 rounded-xl transition cursor-pointer">
+                확인
+            </button>
+        </div>
+    </div>
+
+    <!-- Footer Banner -->
+    <footer class="z-20 text-center text-xs text-amber-200/50 my-4">
+        <p>🎑 2026 풍성한 한가위 · 담임 선생님께 마음을 전해보세요</p>
+    </footer>
+
+    <script>
+        // Preset Messages
+        const presets = [
+            `선생님, 안녕하세요! 
+풍성한 보름달처럼 마음까지 따뜻해지는 즐거운 추석 명절이 다가왔습니다.
+
+항상 인내와 사랑으로 저희를 바른 길로 이끌어 주시고 늘 세심하게 챙겨주셔서 진심으로 감사드립니다. 
+
+이번 연휴 동안은 학교 일은 잠시 잊으시고, 사랑하는 가족분들과 함께 맛있는 음식도 많이 드시며 편안하고 행복한 휴식 보내시길 바랍니다. 
+
+항상 건강하시고 가정에 늘 웃음과 행복이 가득하시길 마음 모아 기원합니다!`,
+
+            `선생님! 벌써 풍요로운 한가위 추석입니다 😊
+항상 교실에서 저희를 웃는 얼굴로 맞아주시고 따뜻하게 가르쳐 주셔서 정말 감사합니다.
+
+선생님 덕분에 이번 학기도 매일매일 즐겁고 알차게 배우고 있습니다!
+추석 연휴 동안 맛있는 송편이랑 음식 많이 드시고, 가족들과 웃음 가득한 행복한 한가위 보내세요!
+
+명절 지나고 더 씩씩하고 발전된 모습으로 찾아뵙겠습니다! 🌕✨`,
+
+            `존경하는 선생님께,
+풍요로운 결실의 계절 추석을 맞아 감사 인사를 드립니다.
+
+늘 변함없는 열정과 따뜻한 가르침으로 저희의 성장을 지켜봐 주셔서 늘 마음 깊이 감사하고 있습니다.
+
+이번 추석 명절, 보름달처럼 밝고 풍성한 행복이 선생님의 가정에 가득하시기를 진심으로 기원합니다. 건강하고 평안한 연휴 보내세요!`
+        ];
+
+        // Global DOM Elements
+        const teacherTitleInput = document.getElementById('teacherTitleInput');
+        const studentNameInput = document.getElementById('studentNameInput');
+        const messageEditor = document.getElementById('messageEditor');
+        const cardToTitle = document.getElementById('cardToTitle');
+        const messageDisplay = document.getElementById('messageDisplay');
+        const studentNameDisplay = document.getElementById('studentNameDisplay');
+        const wishModal = document.getElementById('wishModal');
+
+        // Initialize Form Values
+        messageEditor.value = presets[0];
+
+        // Apply Preset Message
+        function applyPreset(index) {
+            messageEditor.value = presets[index];
+            updateCardText();
+        }
+
+        // Live Update Card Text
+        function updateCardText() {
+            const titleVal = teacherTitleInput.value.trim();
+            const nameVal = studentNameInput.value.trim();
+            const msgVal = messageEditor.value;
+
+            cardToTitle.textContent = titleVal || '존경하는 담임 선생님께';
+            messageDisplay.textContent = msgVal || '추석 메시지를 입력해주세요.';
+            studentNameDisplay.textContent = nameVal || 'OOO';
+        }
+
+        // Tone.js Background Music Setup
+        let isMusicPlaying = false;
+        let polySynth = null;
+        let bgmLoop = null;
+
+        // Pentatonic Scale Melody inspired by traditional music (G Pentatonic: G3, A3, B3, D4, E4, G4)
+        const notesPattern = [
+            { note: "G3", duration: "4n", time: 0 },
+            { note: "B3", duration: "4n", time: 0.5 },
+            { note: "D4", duration: "2n", time: 1.0 },
+            { note: "E4", duration: "4n", time: 2.0 },
+            { note: "D4", duration: "4n", time: 2.5 },
+            { note: "B3", duration: "2n", time: 3.0 },
+
+            { note: "A3", duration: "4n", time: 4.0 },
+            { note: "B3", duration: "4n", time: 4.5 },
+            { note: "D4", duration: "4n", time: 5.0 },
+            { note: "E4", duration: "4n", time: 5.5 },
+            { note: "G4", duration: "1n", time: 6.0 },
+
+            { note: "E4", duration: "4n", time: 8.0 },
+            { note: "G4", duration: "4n", time: 8.5 },
+            { note: "E4", duration: "4n", time: 9.0 },
+            { note: "D4", duration: "4n", time: 9.5 },
+            { note: "B3", duration: "2n", time: 10.0 },
+
+            { note: "A3", duration: "4n", time: 11.0 },
+            { note: "G3", duration: "4n", time: 11.5 },
+            { note: "A3", duration: "2n", time: 12.0 },
+            { note: "G3", duration: "1n", time: 13.0 }
+        ];
+
+        async function initAudio() {
+            if (!polySynth) {
+                await Tone.start();
+                polySynth = new Tone.PolySynth(Tone.Synth, {
+                    oscillator: { type: "sine" },
+                    envelope: {
+                        attack: 0.1,
+                        decay: 0.8,
+                        sustain: 0.4,
+                        release: 1.2
+                    }
+                }).toDestination();
+                
+                // Add soft reverb effect
+                const reverb = new Tone.Reverb({ decay: 3, wet: 0.4 }).toDestination();
+                polySynth.connect(reverb);
+                polySynth.volume.value = -12; // Gentle volume level
+
+                // Schedule Melody Loop
+                const part = new Tone.Part((time, value) => {
+                    polySynth.triggerAttackRelease(value.note, value.duration, time);
+                }, notesPattern);
+
+                part.loop = true;
+                part.loopEnd = "15s";
+                Tone.Transport.bpm.value = 75; // Peaceful slow tempo
+                part.start(0);
+            }
+        }
+
+        async function toggleBGM() {
+            const bgmIcon = document.getElementById('bgmIcon');
+            const bgmText = document.getElementById('bgmText');
+
+            try {
+                if (!isMusicPlaying) {
+                    await initAudio();
+                    Tone.Transport.start();
+                    isMusicPlaying = true;
+                    bgmIcon.textContent = "🔊";
+                    bgmText.textContent = "음악 끄기";
+                } else {
+                    Tone.Transport.stop();
+                    isMusicPlaying = false;
+                    bgmIcon.textContent = "🎵";
+                    bgmText.textContent = "추석 배경음악 켜기";
+                }
+            } catch (err) {
+                console.error("Audio Play Error:", err);
+            }
+        }
+
+        // Interactive Wish on Moon Effect
+        function makeMoonWish() {
+            // Trigger Confetti Stars
+            if (typeof confetti === 'function') {
+                confetti({
+                    particleCount: 60,
+                    spread: 70,
+                    origin: { y: 0.3, x: 0.8 },
+                    colors: ['#fef08a', '#f59e0b', '#ffffff', '#fbbf24']
+                });
+            }
+
+            const wishes = [
+                "🌕 달님께 소원을 빌었습니다!\n'선생님께서 올 한 해 늘 건강하시고 행복 가득하게 해주세요!' ✨",
+                "🌕 달님께 소원을 빌었습니다!\n'우리 학급 모두 추석 연휴 잘 보내고 웃는 얼굴로 다시 만나요!' 🎉",
+                "🌕 달님께 소원을 빌었습니다!\n'담임 선생님의 모든 소원이 보름달처럼 풍성하게 이루어지기를!' 🌟"
+            ];
+            
+            const randomWish = wishes[Math.floor(Math.random() * wishes.length)];
+            showModal("🌕 보름달 소원 성취", randomWish, "🌕");
+        }
+
+        // Songpyeon Surprise Modal
+        function showSongpyeonWish() {
+            if (typeof confetti === 'function') {
+                confetti({
+                    particleCount: 50,
+                    spread: 60,
+                    origin: { y: 0.6 }
+                });
+            }
+
+            showModal(
+                "🍡 알록달록 송편 선물",
+                `선생님께 마음속으로 정성껏 빚은 알록달록 꿀송편을 전달해 드렸습니다!\n\n달콤하고 풍성한 명절 보내세요! 💚🌾`,
+                "🍡"
+            );
+        }
+
+        // Modal Helpers
+        function showModal(title, body, icon) {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalBody').textContent = body;
+            document.getElementById('modalIcon').textContent = icon;
+            wishModal.classList.remove('hidden');
+        }
+
+        function closeModal() {
+            wishModal.classList.add('hidden');
+        }
+
+        // Copy Card Message to Clipboard
+        function copyCardContent() {
+            const title = cardToTitle.textContent;
+            const body = messageDisplay.textContent;
+            const student = studentNameDisplay.textContent;
+
+            const fullText = `[추석 감사 카드]\n\n${title}\n\n${body}\n\n- 제자 ${student} 올림 -`;
+
+            // Standard fallback copy for inside preview containers
+            const textarea = document.createElement('textarea');
+            textarea.value = fullText;
+            document.body.appendChild(textarea);
+            textarea.select();
+            
+            try {
+                document.execCommand('copy');
+                showModal("📋 복사 완료!", "추석 감사 메시지가 클립보드에 복사되었습니다.\n카카오톡이나 문자메시지로 선생님께 전달해 보세요! 💌", "✅");
+            } catch (err) {
+                showModal("복사 실패", "메시지를 복사하는 중 오류가 발생했습니다.", "⚠️");
+            } finally {
+                document.body.removeChild(textarea);
+            }
+        }
+
+        // Initial setup on load
+        window.addEventListener('DOMContentLoaded', () => {
+            updateCardText();
+        });
+    </script>
+</body>
+</html>
